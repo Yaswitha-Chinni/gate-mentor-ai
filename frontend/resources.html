@@ -62,17 +62,6 @@
             <input type="text" class="search-input" placeholder="Search notes, PYQs, subjects..." id="searchInput">
             <select class="search-select" id="subjectFilter">
                 <option value="All Subjects">All Subjects</option>
-                <option value="Programming & Data Structures">Programming & Data Structures</option>
-                <option value="Algorithms">Algorithms</option>
-                <option value="Operating Systems">Operating Systems</option>
-                <option value="DBMS">DBMS</option>
-                <option value="Computer Networks">Computer Networks</option>
-                <option value="Theory of Computation">Theory of Computation</option>
-                <option value="Compiler Design">Compiler Design</option>
-                <option value="Digital Logic">Digital Logic</option>
-                <option value="Computer Organization">Computer Organization</option>
-                <option value="Engineering Mathematics">Engineering Mathematics</option>
-                <option value="Discrete Mathematics">Discrete Mathematics</option>
             </select>
         </div>
         
@@ -135,6 +124,16 @@
                 ];
             }
             
+            // Populate Subject Dropdown Dynamically
+            const subjectSelect = document.getElementById('subjectFilter');
+            const uniqueSubjects = [...new Set(resources.map(r => r.subject_name))].filter(Boolean);
+            uniqueSubjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject.replace(/^[0-9]+_/, '').replace(/_/g, ' ');
+                subjectSelect.appendChild(option);
+            });
+            
             const render = () => {
                 const searchTerm = document.getElementById('searchInput').value.toLowerCase();
                 const subjectFilter = document.getElementById('subjectFilter').value;
@@ -158,7 +157,7 @@
                             </div>
                             <div class="rc-badge">${r.resource_type.replace('_', ' ')}</div>
                         </div>
-                        <div class="rc-title">${r.topic_name ? r.topic_name + ' - ' : ''}${r.title}</div>
+                        <div class="rc-title">${r.title}</div>
                         <div class="rc-subject">${r.subject_name}</div>
                         <div class="rc-desc">${r.desc || "Comprehensive study material to help you prepare effectively."}</div>
                         <div class="rc-footer">
