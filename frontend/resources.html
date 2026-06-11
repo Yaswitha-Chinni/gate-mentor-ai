@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +7,220 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/style.css">
     <style>
-        .search-container { display: flex; gap: 1rem; max-width: 800px; margin: 3rem auto 2rem; }
-        .search-input { flex: 1; padding: 1rem 1.5rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem; outline: none; }
-        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
-        .search-select { padding: 1rem 1.5rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem; outline: none; background: white; min-width: 200px; }
+        /* Dark Mode & Accordion Specific Styles */
+        :root {
+            --card-bg: white;
+            --accordion-bg: #f8fafc;
+            --accordion-hover: #f1f5f9;
+        }
+
+        [data-theme='dark'] {
+            --bg-main: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --card-bg: #1e293b;
+            --accordion-bg: #0f172a;
+            --accordion-hover: #1e293b;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar {
+            background-color: var(--bg-main);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            outline: none;
+            background: var(--card-bg);
+            color: var(--text-main);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,102,255,0.1);
+        }
+
+        /* Accordion Structure */
+        details {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            background: var(--card-bg);
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--accordion-bg);
+            transition: background 0.2s;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary:hover {
+            background: var(--accordion-hover);
+        }
+
+        summary::after {
+            content: "+";
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        details[open] > summary::after {
+            content: "−";
+        }
+
+        .details-content {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Sub-accordion */
+        .sub-accordion details {
+            margin-bottom: 0.5rem;
+            border-color: var(--border-color);
+            background: var(--card-bg);
+        }
+
+        .sub-accordion summary {
+            font-size: 1rem;
+            font-weight: 500;
+            background: var(--card-bg);
+        }
+
+        /* Material UI Style Resource Card */
+        .resource-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .rc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rc-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Progress Indicator */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
         
-        .filters { display: flex; gap: 0.75rem; justify-content: center; margin-bottom: 2rem; }
-        .filter-pill { padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.95rem; font-weight: 500; cursor: pointer; border: 1px solid var(--border-color); background: white; transition: all 0.2s; }
-        .filter-pill:hover { background: var(--bg-secondary); }
-        .filter-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
-        
-        .resource-count { color: var(--text-muted); font-size: 0.95rem; text-align: left; margin-bottom: 1.5rem; }
-        
-        .resource-card { display: flex; flex-direction: column; padding: 1.5rem; text-align: left; }
-        .rc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
-        .rc-icon { width: 32px; height: 32px; background: #eff6ff; color: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        .rc-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-        
-        .rc-title { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--text-main); }
-        .rc-subject { font-size: 0.85rem; color: var(--primary); font-weight: 500; margin-bottom: 1rem; }
-        .rc-desc { font-size: 0.9rem; color: var(--text-muted); flex: 1; margin-bottom: 1.5rem; }
-        
-        .rc-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 1rem; }
-        .rc-open { color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 0.25rem; }
+        .progress-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .progress-bar-bg {
+            width: 100px;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Resource Buttons */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .resource-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0, 102, 255, 0.05);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            background: var(--bg-secondary);
+        }
     </style>
 </head>
 <body>
@@ -45,140 +236,186 @@
             <a href="/dashboard">Dashboard</a>
             <a href="/planner">AI Chat</a>
             <a href="/timeline">Roadmap</a>
-            <a href="#">Contact</a>
         </div>
         <div class="nav-actions">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                🌙
+            </button>
             <a href="/dashboard" class="btn btn-primary">Start Learning</a>
         </div>
     </nav>
 
-    <section class="container text-center">
-        <span class="section-subtitle">RESOURCES</span>
-        <h1>Study materials for every GATE CSE subject</h1>
-        <p style="max-width: 700px; margin: 0 auto;">Browse handwritten notes, previous year questions, topic-wise practice sets, curated YouTube playlists, and recommended books — all searchable and filterable.</p>
+    <section class="container text-center" style="padding-top: 4rem;">
+        <span class="section-subtitle">MATERIAL UI RESOURCES</span>
+        <h1>Comprehensive Study Hub</h1>
+        <p style="max-width: 700px; margin: 0 auto;">Drill down through Subjects and Topics to instantly access Notes, Cheat Sheets, Formula Sheets, and PYQs.</p>
         
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search notes, PYQs, subjects..." id="searchInput">
-            <select class="search-select" id="subjectFilter">
-                <option value="All Subjects">All Subjects</option>
-            </select>
+            <input type="text" class="search-input" placeholder="Search for any subject or topic..." id="searchInput">
         </div>
         
-        <div class="filters" id="typeFilters" style="flex-wrap: wrap;">
-            <button class="filter-pill active" data-type="all">All Types</button>
-            <button class="filter-pill" data-type="notes">Notes</button>
-            <button class="filter-pill" data-type="handwritten_notes">Handwritten</button>
-            <button class="filter-pill" data-type="pyq">PYQs</button>
-            <button class="filter-pill" data-type="formula_sheet">Formulas</button>
-            <button class="filter-pill" data-type="quiz">Quiz</button>
-            <button class="filter-pill" data-type="flashcards">Flashcards</button>
-            <button class="filter-pill" data-type="mindmap">Mindmap</button>
-            <button class="filter-pill" data-type="revision_notes">Revision</button>
-            <button class="filter-pill" data-type="video">Playlist</button>
-            <button class="filter-pill" data-type="book">Book</button>
-        </div>
-        
-        <div class="resource-count" id="resourceCount">Loading resources...</div>
-        
-        <div class="grid-3" id="resourcesGrid">
-            <!-- Dynamic Injection -->
+        <div id="accordionContainer" style="text-align: left; max-width: 900px; margin: 0 auto;">
+            <!-- Accordions Injected Here -->
+            <div style="text-align: center; color: var(--text-muted); padding: 3rem;">Loading resources...</div>
         </div>
     </section>
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <div class="logo" style="margin-bottom: 1rem;">
-                    <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-                    GateMaster AI
-                </div>
-                <p style="font-size: 0.9rem; max-width: 250px;">AI-powered learning for GATE CSE aspirants. Smarter notes, sharper practice, and personalized roadmaps to help you crack the exam.</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            const grid = document.getElementById('resourcesGrid');
-            const countLabel = document.getElementById('resourceCount');
+            const container = document.getElementById('accordionContainer');
+            const searchInput = document.getElementById('searchInput');
             let resources = [];
             
+            // Theme Toggle Logic
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+            themeToggle.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+                themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+            });
+
+            // Fetch Data
             try {
                 const res = await fetch('/api/resources');
                 resources = await res.json();
             } catch (e) {
                 console.error("Failed to load resources:", e);
-                resources = [];
-            }
-            
-            // Hardcoded backup for UI demonstration if DB empty
-            if(resources.length === 0) {
+                // Fallback for UI demonstration
                 resources = [
-                    {title: "Trees & Graphs Handwritten Notes", subject_name: "Data Structures & Algorithms", resource_type: "notes", url: "#", desc: "Complete coverage of BST, AVL, heaps, and graph traversals with diagrams.", meta: "42 pages - PDF"},
-                    {title: "Process Scheduling PYQs (2010-2024)", subject_name: "Operating Systems", resource_type: "pyq", url: "#", desc: "Every scheduling question from past GATE papers with detailed solutions.", meta: "38 questions - Solved"},
-                    {title: "Normalization Practice Set", subject_name: "DBMS", resource_type: "practice_question", url: "#", desc: "Topic-wise drills on 1NF-BCNF with instant explanations.", meta: "60 questions"},
-                    {title: "TCP/IP & Routing Playlist", subject_name: "Computer Networks", resource_type: "video", url: "#", desc: "Curated lectures covering the transport and network layers end to end.", meta: "18 videos - 8h"},
-                    {title: "Pumping Lemma & Regular Languages Notes", subject_name: "Theory of Computation", resource_type: "notes", url: "#", desc: "Clear proofs and worked examples for closure properties and pumping lemma.", meta: "28 pages - PDF"},
-                    {title: "Parsing Techniques PYQs", subject_name: "Compiler Design", resource_type: "pyq", url: "#", desc: "LL, LR, SLR and LALR parsing problems from previous GATE exams.", meta: "24 questions - Solved"}
+                    {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "notes", url: "/placeholder.pdf"},
+                    {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "revision_notes", url: "/placeholder.pdf"},
+                    {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "formula_sheet", url: "/placeholder.pdf"},
+                    {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "pyq", url: "/placeholder.pdf"},
                 ];
             }
-            
-            // Populate Subject Dropdown Dynamically
-            const subjectSelect = document.getElementById('subjectFilter');
-            const uniqueSubjects = [...new Set(resources.map(r => r.subject_name))].filter(Boolean);
-            uniqueSubjects.forEach(subject => {
-                const option = document.createElement('option');
-                option.value = subject;
-                option.textContent = subject.replace(/^[0-9]+_/, '').replace(/_/g, ' ');
-                subjectSelect.appendChild(option);
+
+            // Build Hierarchy: Subject -> Main Topic -> Sub Topic
+            let hierarchy = {};
+
+            resources.forEach(r => {
+                // Clean subject name
+                const cleanSubject = r.subject_name.replace(/^[0-9]+_/, '').replace(/_/g, ' ');
+                
+                // Parse topic name into Main and Sub
+                const topicParts = r.topic_name ? r.topic_name.split(' - ') : ['General'];
+                const mainTopic = topicParts[0].replace(/_/g, ' ');
+                const subTopic = (topicParts.slice(1).join(' - ') || mainTopic).replace(/_/g, ' ');
+
+                if (!hierarchy[cleanSubject]) hierarchy[cleanSubject] = {};
+                if (!hierarchy[cleanSubject][mainTopic]) hierarchy[cleanSubject][mainTopic] = {};
+                if (!hierarchy[cleanSubject][mainTopic][subTopic]) hierarchy[cleanSubject][mainTopic][subTopic] = {};
+
+                // Map resource types to specific buttons
+                // Notes, Cheat Sheet (revision_notes or handwritten_notes), Formula Sheet, PYQs
+                const t = r.resource_type;
+                if (t === 'notes') hierarchy[cleanSubject][mainTopic][subTopic].notes = r.url;
+                if (t === 'revision_notes' || t === 'handwritten_notes') hierarchy[cleanSubject][mainTopic][subTopic].cheatSheet = r.url;
+                if (t === 'formula_sheet') hierarchy[cleanSubject][mainTopic][subTopic].formulaSheet = r.url;
+                if (t === 'pyq') hierarchy[cleanSubject][mainTopic][subTopic].pyqs = r.url;
             });
-            
-            const render = () => {
-                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-                const subjectFilter = document.getElementById('subjectFilter').value;
-                const activeType = document.querySelector('.filter-pill.active').dataset.type;
-                
-                const filtered = resources.filter(r => {
-                    const searchStr = `${r.title} ${r.subject_name} ${r.topic_name || ''}`.toLowerCase();
-                    const matchesSearch = searchStr.includes(searchTerm);
-                    const matchesSubj = subjectFilter === "All Subjects" || r.subject_name === subjectFilter;
-                    const matchesType = activeType === "all" || r.resource_type === activeType;
-                    return matchesSearch && matchesSubj && matchesType;
-                });
-                
-                countLabel.textContent = `Showing ${filtered.length} resources`;
-                
-                grid.innerHTML = filtered.map(r => `
-                    <div class="card resource-card">
-                        <div class="rc-header">
-                            <div class="rc-icon">
-                                ${r.resource_type === 'video' ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>' : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>'}
-                            </div>
-                            <div class="rc-badge">${r.resource_type.replace('_', ' ')}</div>
-                        </div>
-                        <div class="rc-title">${r.title}</div>
-                        <div class="rc-subject">${r.subject_name}</div>
-                        <div class="rc-desc">${r.desc || "Comprehensive study material to help you prepare effectively."}</div>
-                        <div class="rc-footer">
-                            <div>${r.meta || "Available"}</div>
-                            <a href="${r.url}" class="rc-open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"></path><polyline points="21 3 14 3 14 10"></polyline><line x1="21" y1="3" x2="10" y2="14"></line></svg> Open</a>
-                        </div>
-                    </div>
-                `).join('');
+
+            // Calculate mock progress based on strings so it stays consistent
+            const getProgress = (str) => {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                return Math.abs(hash % 101); // 0 to 100
             };
-            
-            document.getElementById('searchInput').addEventListener('input', render);
-            document.getElementById('subjectFilter').addEventListener('change', render);
-            
-            document.querySelectorAll('.filter-pill').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    render();
+
+            const render = () => {
+                const term = searchInput.value.toLowerCase();
+                let html = '';
+
+                Object.keys(hierarchy).forEach(subject => {
+                    const mains = hierarchy[subject];
+                    let subjectHasMatch = false;
+                    let mainHtml = '';
+
+                    Object.keys(mains).forEach(mainTopic => {
+                        const subs = mains[mainTopic];
+                        let mainHasMatch = false;
+                        let subHtml = '';
+
+                        Object.keys(subs).forEach(subTopic => {
+                            const resObj = subs[subTopic];
+                            
+                            // Check search match
+                            const searchStr = `${subject} ${mainTopic} ${subTopic}`.toLowerCase();
+                            if (!searchStr.includes(term)) return;
+
+                            subjectHasMatch = true;
+                            mainHasMatch = true;
+
+                            const progress = getProgress(subTopic);
+
+                            // Resource Card HTML
+                            subHtml += `
+                                <div class="resource-card">
+                                    <div class="rc-header">
+                                        <div class="rc-title">${subTopic}</div>
+                                        <div class="progress-container">
+                                            <span class="progress-label">${progress}% Completed</span>
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill" style="width: ${progress}%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-grid">
+                                        <a href="${resObj.notes || '#'}" target="_blank" class="resource-btn">
+                                            📄 View Notes
+                                        </a>
+                                        <a href="${resObj.cheatSheet || '#'}" target="_blank" class="resource-btn">
+                                            ⚡ Cheat Sheet
+                                        </a>
+                                        <a href="${resObj.formulaSheet || '#'}" target="_blank" class="resource-btn">
+                                            ∑ Formula Sheet
+                                        </a>
+                                        <a href="${resObj.pyqs || '#'}" target="_blank" class="resource-btn">
+                                            🎯 View PYQs
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        if (mainHasMatch) {
+                            // Automatically open details if there's a search term
+                            const isOpen = term.length > 0 ? 'open' : '';
+                            mainHtml += `
+                                <div class="sub-accordion">
+                                    <details ${isOpen}>
+                                        <summary>${mainTopic}</summary>
+                                        <div class="details-content">
+                                            ${subHtml}
+                                        </div>
+                                    </details>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    if (subjectHasMatch) {
+                        const isOpen = term.length > 0 ? 'open' : '';
+                        html += `
+                            <details ${isOpen}>
+                                <summary>${subject}</summary>
+                                <div class="details-content">
+                                    ${mainHtml}
+                                </div>
+                            </details>
+                        `;
+                    }
                 });
-            });
-            
+
+                container.innerHTML = html || '<div style="text-align:center; padding: 2rem; color: var(--text-muted);">No topics found matching your search.</div>';
+            };
+
+            searchInput.addEventListener('input', render);
             render();
         });
     </script>
