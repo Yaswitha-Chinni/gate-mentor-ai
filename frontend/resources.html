@@ -292,8 +292,7 @@
                 resources = [
                     {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "notes", url: "/placeholder.pdf"},
                     {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "revision_notes", url: "/placeholder.pdf"},
-                    {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "formula_sheet", url: "/placeholder.pdf"},
-                    {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "pyq", url: "/placeholder.pdf"},
+                    {subject_name: "01_Engineering_Mathematics", topic_name: "Discrete_Mathematics - Sets", title: "Sets", resource_type: "pyq", url: "/placeholder.json"},
                 ];
             }
 
@@ -314,11 +313,10 @@
                 if (!hierarchy[cleanSubject][mainTopic][subTopic]) hierarchy[cleanSubject][mainTopic][subTopic] = {};
 
                 // Map resource types to specific buttons
-                // Notes, Cheat Sheet (revision_notes or handwritten_notes), Formula Sheet, PYQs
+                // Notes, Cheat Sheet (revision_notes or handwritten_notes), PYQs
                 const t = r.resource_type;
                 if (t === 'notes') hierarchy[cleanSubject][mainTopic][subTopic].notes = r.url;
                 if (t === 'revision_notes' || t === 'handwritten_notes') hierarchy[cleanSubject][mainTopic][subTopic].cheatSheet = r.url;
-                if (t === 'formula_sheet') hierarchy[cleanSubject][mainTopic][subTopic].formulaSheet = r.url;
                 if (t === 'pyq') hierarchy[cleanSubject][mainTopic][subTopic].pyqs = r.url;
             });
 
@@ -385,11 +383,8 @@
                                         <a href="${resObj.cheatSheet || '#'}" target="_blank" class="resource-btn">
                                             ⚡ Cheat Sheet
                                         </a>
-                                        <a href="${resObj.formulaSheet || '#'}" target="_blank" class="resource-btn">
-                                            ∑ Formula Sheet
-                                        </a>
                                         <a href="${resObj.pyqs || '#'}" target="_blank" class="resource-btn">
-                                            🎯 View PYQs
+                                            🎯 Practice PYQs
                                         </a>
                                     </div>
                                 </div>
