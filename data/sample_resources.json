@@ -1,0 +1,62 @@
+[
+  {
+    "topic_id": 1,
+    "resource_type": "video",
+    "title": "C Programming Full Course",
+    "url": "https://www.youtube.com/watch?v=KJgsSFOSQv0"
+  },
+  {
+    "topic_id": 1,
+    "resource_type": "notes",
+    "title": "Programming in C Notes PDF",
+    "url": "https://example.com/c_notes.pdf"
+  },
+  {
+    "topic_id": 2,
+    "resource_type": "video",
+    "title": "Arrays and Stacks Explained",
+    "url": "https://www.youtube.com/watch?v=RBSGKlAvoiM"
+  },
+  {
+    "topic_id": 2,
+    "resource_type": "practice_question",
+    "title": "GeeksforGeeks Stacks Practice",
+    "url": "https://practice.geeksforgeeks.org/explore?page=1&category[]=Stack"
+  },
+  {
+    "topic_id": 6,
+    "resource_type": "video",
+    "title": "Sorting Algorithms Visualized",
+    "url": "https://www.youtube.com/watch?v=kPRA0W1kECg"
+  },
+  {
+    "topic_id": 6,
+    "resource_type": "pyq",
+    "title": "GATE PYQs on Sorting",
+    "url": "https://example.com/pyq/sorting"
+  },
+  {
+    "topic_id": 11,
+    "resource_type": "video",
+    "title": "Processes and Threads in OS",
+    "url": "https://www.youtube.com/watch?v=OrM7nZcxXZU"
+  },
+  {
+    "topic_id": 16,
+    "resource_type": "video",
+    "title": "ER Model Concepts",
+    "url": "https://www.youtube.com/watch?v=vVw9X85QW2o"
+  },
+  {
+    "topic_id": 21,
+    "resource_type": "notes",
+    "title": "OSI Model Summary Notes",
+    "url": "https://example.com/osi_notes.pdf"
+  },
+  {
+    "topic_id": 26,
+    "resource_type": "video",
+    "title": "Finite Automata Basics",
+    "url": "https://www.youtube.com/watch?v=48M1eJtG7B8"
+  }
+]

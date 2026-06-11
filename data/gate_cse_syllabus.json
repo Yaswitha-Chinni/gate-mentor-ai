@@ -1,0 +1,68 @@
+{
+  "Programming & Data Structures": [
+    "Programming in C",
+    "Arrays and Stacks",
+    "Queues and Linked Lists",
+    "Trees and Binary Search Trees",
+    "Graphs and Hashing"
+  ],
+  "Algorithms": [
+    "Searching and Sorting",
+    "Asymptotic Worst Case Time and Space Complexity",
+    "Algorithm Design Techniques: Greedy, Dynamic Programming, Divide and Conquer",
+    "Graph Search, Minimum Spanning Trees, Shortest Paths"
+  ],
+  "Operating Systems": [
+    "Processes and Threads",
+    "Inter-process Communication and Concurrency",
+    "Deadlock and CPU Scheduling",
+    "Memory Management and Virtual Memory",
+    "File Systems"
+  ],
+  "DBMS": [
+    "ER-model and Relational Model",
+    "Relational Algebra and Tuple Calculus",
+    "SQL",
+    "Integrity Constraints and Normal Forms",
+    "Transactions and Concurrency Control"
+  ],
+  "Computer Networks": [
+    "Concept of Layering and OSI Model",
+    "Data Link Layer: Framing, Error Control, Flow Control",
+    "Medium Access Control",
+    "Routing algorithms (Link state, distance vector)",
+    "TCP/UDP and Sockets"
+  ],
+  "Theory of Computation": [
+    "Regular Expressions and Finite Automata",
+    "Context-Free Grammars and Push-down Automata",
+    "Regular and Context-free Languages, Pumping Lemma",
+    "Turing Machines and Undecidability"
+  ],
+  "Compiler Design": [
+    "Lexical Analysis",
+    "Parsing and Syntax Directed Translation",
+    "Runtime Environments",
+    "Intermediate Code Generation",
+    "Local Optimization and Data Flow Analyses"
+  ],
+  "Computer Organization": [
+    "Machine Instructions and Addressing Modes",
+    "ALU and Data-path",
+    "CPU Control Design",
+    "Memory Interface and Cache",
+    "I/O Interface (Interrupt and DMA mode)"
+  ],
+  "Digital Logic": [
+    "Boolean Algebra",
+    "Combinational and Sequential Circuits",
+    "Minimization",
+    "Number Representations and Computer Arithmetic"
+  ],
+  "Engineering Mathematics": [
+    "Discrete Mathematics",
+    "Linear Algebra",
+    "Calculus",
+    "Probability and Statistics"
+  ]
+}

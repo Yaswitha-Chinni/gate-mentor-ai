@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - GateMaster AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/style.css">
+    <style>
+        .auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-secondary); padding: 2rem 0; }
+        .auth-card { background: white; padding: 3rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 100%; max-width: 600px; }
+        .auth-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group.full-width { grid-column: span 2; }
+        .form-group label { font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
+        .form-group input, .form-group select { padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem; outline: none; transition: border-color 0.2s; background: white; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
+        .auth-error { color: #ef4444; font-size: 0.9rem; font-weight: 500; text-align: center; display: none; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="text-center" style="margin-bottom: 2rem;">
+                <div class="logo" style="justify-content: center; margin-bottom: 1rem;">
+                    <div class="logo-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+                    <h2>GateMaster AI</h2>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Create your account and start your GATE prep journey.</p>
+                <div class="auth-error" id="errorMsg">Registration failed. Please try again.</div>
+            </div>
+
+            <form class="auth-form" id="registerForm">
+                <div class="form-group full-width">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required placeholder="John Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="mobile">Mobile Number</label>
+                    <input type="tel" id="mobile" required placeholder="+91 9876543210">
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Create a strong password">
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="college">College Name</label>
+                    <input type="text" id="college" required placeholder="IIT Bombay">
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="branch">Current Branch</label>
+                    <select id="branch" required>
+                        <option value="" disabled selected>Select your branch</option>
+                        <option value="Computer Science (CSE)">Computer Science (CSE)</option>
+                        <option value="Data Science & AI (DA)">Data Science & AI (DA)</option>
+                        <option value="Electronics (ECE)">Electronics (ECE)</option>
+                        <option value="Electrical (EE)">Electrical (EE)</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="passingYear">Passing Year</label>
+                    <input type="number" id="passingYear" required placeholder="e.g. 2026" min="2000" max="2035">
+                </div>
+                <div class="form-group">
+                    <label for="appearingYear">Appearing Year for GATE</label>
+                    <input type="number" id="appearingYear" required placeholder="e.g. 2026" min="2025" max="2035">
+                </div>
+                
+                <button type="submit" class="btn btn-primary full-width" style="margin-top: 1rem;">Create Account</button>
+            </form>
+            
+            <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted); text-align: center;">
+                Already have an account? <a href="/login" style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign in here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                full_name: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                mobile: document.getElementById('mobile').value,
+                password: document.getElementById('password').value,
+                college: document.getElementById('college').value,
+                branch: document.getElementById('branch').value,
+                passing_year: parseInt(document.getElementById('passingYear').value),
+                appearing_year: parseInt(document.getElementById('appearingYear').value)
+            };
+            
+            const errorMsg = document.getElementById('errorMsg');
+            
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                if(data.success) {
+                    // Auto login and redirect to setup or dashboard
+                    localStorage.setItem('user_id', data.user_id);
+                    localStorage.setItem('user_name', data.full_name);
+                    window.location.href = '/dashboard';
+                } else {
+                    errorMsg.textContent = data.detail || "Registration failed";
+                    errorMsg.style.display = 'block';
+                }
+            } catch(e) {
+                errorMsg.textContent = "Server error. Try again.";
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
