@@ -235,7 +235,6 @@
             <a href="/resources" class="active">Resources</a>
             <a href="/dashboard">Dashboard</a>
             <a href="/planner">AI Chat</a>
-            <a href="/timeline">Roadmap</a>
         </div>
         <div class="nav-actions">
             <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
@@ -251,7 +250,10 @@
         <p style="max-width: 700px; margin: 0 auto;">Drill down through Subjects and Topics to instantly access Notes, Cheat Sheets, Formula Sheets, and PYQs.</p>
         
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search for any subject or topic..." id="searchInput">
+            <input type="text" class="search-input" placeholder="Search for any subject or topic..." id="searchInput" style="flex: 2;">
+            <select class="search-input" id="subjectFilter" style="flex: 1; cursor: pointer;">
+                <option value="All Subjects">All Subjects</option>
+            </select>
         </div>
         
         <div id="accordionContainer" style="text-align: left; max-width: 900px; margin: 0 auto;">
@@ -320,6 +322,14 @@
                 if (t === 'pyq') hierarchy[cleanSubject][mainTopic][subTopic].pyqs = r.url;
             });
 
+            const subjectSelect = document.getElementById('subjectFilter');
+            Object.keys(hierarchy).sort().forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+
             // Calculate mock progress based on strings so it stays consistent
             const getProgress = (str) => {
                 let hash = 0;
@@ -329,9 +339,12 @@
 
             const render = () => {
                 const term = searchInput.value.toLowerCase();
+                const subjectFilterVal = subjectSelect.value;
                 let html = '';
 
                 Object.keys(hierarchy).forEach(subject => {
+                    if (subjectFilterVal !== 'All Subjects' && subject !== subjectFilterVal) return;
+                    
                     const mains = hierarchy[subject];
                     let subjectHasMatch = false;
                     let mainHtml = '';
@@ -416,6 +429,7 @@
             };
 
             searchInput.addEventListener('input', render);
+            subjectSelect.addEventListener('change', render);
             render();
         });
     </script>
