@@ -104,7 +104,7 @@ def initialize_database():
         CREATE TABLE IF NOT EXISTS resources (
             resource_id INTEGER PRIMARY KEY AUTOINCREMENT,
             topic_id INTEGER NOT NULL,
-            resource_type TEXT CHECK(resource_type IN ('video', 'notes', 'pyq', 'practice_question')) NOT NULL,
+            resource_type TEXT NOT NULL,
             title TEXT NOT NULL,
             url TEXT NOT NULL,
             FOREIGN KEY (topic_id) REFERENCES topics (topic_id) ON DELETE CASCADE
